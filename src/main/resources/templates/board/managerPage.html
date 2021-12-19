@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="board/layout/basic">
+    <th:block layout:fragment="title">
+        <title>this The page is a 관리자페이지 page</title>
+    </th:block>
+    
+    <th:block layout:fragment="search">
+        <form action="#" id="searchform-header" class="searchform js__toggle active pull-right">
+            <input type="search" placeholder="Search..." class="input-search">
+            <button class="mdi mdi-magnify button-search" type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </form>
+    </th:block>
+    
+		<th:block layout:fragment="content">
+		   
+        <div class="table-responsive clearfix">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>닉네임</th>
+                        <th>성별</th>
+                        <th>생년월일</th>
+                        <th>이메일</th>
+                        <th>휴대전화</th>
+                        <th>주소</th>
+                        <th>가입일</th>
+                        <th>탈퇴일</th>
+                        <th>정지일</th>
+                        <th>활동상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${not #lists.isEmpty( memberList )}" th:each="member : ${memberList}"> <!-- 콘트롤러에서 보낸 memberlist를 member변수에 지정 -->
+                        
+                        
+                        <td th:text="${member.user_Number}"></td>
+                        <td th:text="${member.user_ID}"></td>
+                        <td th:text="${member.user_Name}"></td>
+                        <td th:text="${member.user_NickName}"></td>
+                        <td th:text="${member.user_Gender}"></td>
+                        <td th:text="${member.user_DOB}"></td>
+                        <td th:text="${member.user_Email}"></td>
+                        <td th:text="${member.user_PhoneNumber}"></td>
+                        <td th:text="${member.user_Address}"></td>
+                        <td th:text="${#temporals.format( member.user_JoinDate, 'yyyy-MM-dd' )}"></td>
+                        <td th:text="${#temporals.format( member.user_SecessionDate, 'yyyy-MM-dd' )}"></td>
+                        <td th:text="${#temporals.format( member.user_StopDate, 'yyyy-MM-dd' )}"></td>
+                        <td th:text="${member.user_State}"></td>
+                       
+                    </tr>
+                    
+                    <tr th:unless="${not #lists.isEmpty( memberList )}">
+                        <td colspan="5">조회된 결과가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+           
+
+            <th:block layout:fragment="paging">
+                <nav aria-label="Page navigation" class="text-center">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </th:block>
+        </div>
+    
+        <!-- /.card-content -->
+		</th:block>
+</html>

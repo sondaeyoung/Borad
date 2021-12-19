@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.MemberMapper">
+    <sql id="memberColumns">
+          user_Number
+        , user_ID
+        , user_PW
+        , user_Name
+        , user_NickName
+        , user_Gender
+        , user_DOB
+        , user_Email
+        , user_PhoneNumber
+        , user_Address
+        , user_JoinDate
+        , user_SecessionDate
+        , user_StopDate
+        , user_Authority
+        , user_State
+    </sql>
+    
+    <insert id="join" parameterType="MemberDTO">
+        INSERT INTO USER_TB(
+            <include refid="memberColumns"/>
+        )VALUES(
+                #{user_Number}
+              , #{user_ID}
+              , #{user_PW}
+              , #{user_Name}
+              , #{user_NickName}
+              , #{user_Gender}
+              , #{user_DOB}
+              , #{user_Email}
+              , #{user_PhoneNumber}
+              , #{user_Address}
+              , NOW()
+              , NULL
+              , NULL
+              , 1
+              , 1
+        )            
+    </insert>
+    
+    <select id="login" parameterType="MemberDTO" resultType="MemberDTO">
+        SELECT
+            user_PW
+        FROM
+            USER_TB
+        WHERE
+            user_ID = #{user_ID}
+    </select>
+    
+    <select id="selectMemberDetail" parameterType="String" resultType="MemberDTO">
+            SELECT
+                user_ID, user_Name, user_NickName, user_Address
+            FROM
+                USER_TB
+            Where
+                user_ID = #{user_ID}      
+    </select>
+    
+    <update id="updateMember" parameterType="MemberDTO">
+        UPDATE USER_TB
+        SET
+              user_PW = #{user_PW}
+            , user_NickName = #{user_NickName}
+            , user_Address = #{user_Address}
+           
+        WHERE
+            user_ID = #{user_ID}
+    </update>
+    
+    <update id="deleteMember" parameterType="MemberDTO">
+        UPDATE USER_TB
+        SET
+              user_State = 0
+            
+           
+        WHERE
+            user_ID = #{user_ID}
+    </update>
+    
+    <select id="selectMemberList" parameterType="MemberDTO" resultType="MemberDTO">
+        SELECT
+            <include refid="memberColumns" />
+        FROM
+            USER_TB
+        
+        ORDER BY
+            user_Number DESC,
+            user_JoinDate DESC
+    </select>
+    
+    <select id="selectMemberTotalCount" parameterType="MemberDTO" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            USER_TB
+        
+    </select>
+    
+    
+</mapper>

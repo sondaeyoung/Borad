@@ -21,7 +21,7 @@ public interface MemberMapper {
         
         public List<MemberDTO> selectMemberList(); // 관리자 멤버 관리할때 리스트를 보여줌
         
-        public int selectMemberTotalCount();
+        public int selectMemberTotalCount(); //만든 유저아이디가 몇개인지
         
         public int authority(String user_ID); //권한 확인
         

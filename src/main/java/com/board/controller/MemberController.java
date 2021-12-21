@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.board.constant.Method;
 import com.board.domain.BoardDTO;
 import com.board.domain.MemberDTO;
 import com.board.service.MemberService;
+import com.board.util.UiUtils;
 
 @Controller
-public class MemberController {
+public class MemberController extends UiUtils {
     
     @Autowired
     private MemberService memberService;
@@ -56,13 +58,18 @@ public class MemberController {
     
 
     @GetMapping(value = "/board/login.do") //로그인 주소로 이동할때
-    public String openLogin(Model model) {
-        model.addAttribute("member", new MemberDTO());
-        return "board/login";
+    public String openLogin(Model model,HttpSession session) {
+            session.setAttribute("sessionID", null); //세션 초기화
+            session.setAttribute("sessionAuthority", null);
+            model.addAttribute("member", new MemberDTO());
+            return "board/login";
+       
+        
+        
     }
     
     @PostMapping(value = "/board/login.do") //로그인 정보 입력하고 로그인하기 눌렀을때
-    public String Login(MemberDTO member,HttpSession session) {
+    public String Login(MemberDTO member,HttpSession session,Model model) {
         String inputID = member.getUser_ID();
         String inputPW = member.getUser_PW();
         
@@ -70,39 +77,35 @@ public class MemberController {
             
             if(inputID == null || inputID==""||inputPW == null || inputPW == "") {
                 System.out.println("아이디 비밀번호가 안적힘");
-                return "redirect:/board/login.do";
+                return showMessageWithRedirect("아이디와 비밀번호를 적어주세요", "/board/login.do", Method.GET, null, model);
             }else {
                 String result = memberService.loginMember(inputID);
                 int state = memberService.memberState(inputID); // 유저 상태값 가져오기
                 int authority = memberService.memberAuthority(inputID); // 유저 권한값 가져오기
-                System.out.println(result);
-                System.out.println(inputPW);
-                System.out.println(state);
+                
                 if(inputPW.equals(result)) {
                     if(state == 1) {
-                    System.out.println("같으면 로그인성공");
+                    
                     session.setAttribute("sessionAuthority", authority); // 유저권한값 세션저장
                     session.setAttribute("sessionID", inputID); //유저아이디값 세션저장
                     
-                    return "redirect:/board/list.do";
+                    return showMessageWithRedirect("로그인 되었습니다.", "/board/list.do", Method.GET, null, model);
                     }
                     if(state == 0) {
-                        System.out.println("탈퇴한 아이디");
+                        return showMessageWithRedirect("탈퇴한 아이디입니다.", "/board/login.do", Method.GET, null, model);
                     }
                     if(state == 2) {
-                        System.out.println("정지된 아이디");
+                        return showMessageWithRedirect("정지된 아이디입니다.", "/board/login.do", Method.GET, null, model);
                     }
                 }
             }
         }catch(Exception e) {
             e.printStackTrace();
-            System.out.println("뭔가ㅓ 오류뜸");
             System.out.println(member.getUser_ID());
             return "redirect:/board/login.do";
             
         }
-        System.out.println("뭐여 ");
-        
+               
         return "redirect:/board/login.do";
     }
     

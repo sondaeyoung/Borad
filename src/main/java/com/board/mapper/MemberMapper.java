@@ -9,7 +9,7 @@ import com.board.domain.MemberDTO;
 
 @Mapper
 public interface MemberMapper {
-        public MemberDTO login(String user_ID); //로그인
+        public String login(String user_ID); //로그인
         
         public int join(MemberDTO member); // 회원가입
         
@@ -22,4 +22,8 @@ public interface MemberMapper {
         public List<MemberDTO> selectMemberList(); // 관리자 멤버 관리할때 리스트를 보여줌
         
         public int selectMemberTotalCount();
+        
+        public int authority(String user_ID); //권한 확인
+        
+        public int state(String user_ID); //유저 상태 확인
 }

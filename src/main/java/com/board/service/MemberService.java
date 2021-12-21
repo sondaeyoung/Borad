@@ -16,5 +16,9 @@ public interface MemberService {
     
     public List<MemberDTO> getMemberList();
     
-    public MemberDTO loginMember(String user_ID);
+    public String loginMember(String user_ID);
+
+    public int memberAuthority(String user_ID);
+    
+    public int memberState(String user_ID);
 }

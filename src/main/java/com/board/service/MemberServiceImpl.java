@@ -19,12 +19,12 @@ public class MemberServiceImpl implements MemberService {
     private MemberMapper memberMapper;
     
     @Override
-    public MemberDTO loginMember(String user_ID) {
+    public String loginMember(String user_ID) { //로그인하려고 입력된 아이디에 비밀번호 값 가져오기
         // TODO Auto-generated method stub
         
+        String result = memberMapper.login(user_ID);
         
-        
-        return memberMapper.login(user_ID);
+        return result;
     }
 
     @Override
@@ -66,6 +66,24 @@ public class MemberServiceImpl implements MemberService {
                 memberList = memberMapper.selectMemberList();
         }
         return memberList;
+    }
+    
+    @Override
+    public int memberAuthority(String user_ID) { //권한 보기
+        // TODO Auto-generated method stub
+        
+        int result = memberMapper.authority(user_ID);
+        
+        return result;
+    }
+    
+    @Override
+    public int memberState(String user_ID) { //유저 상태 보기
+        // TODO Auto-generated method stub
+        
+        int result = memberMapper.state(user_ID);
+        
+        return result;
     }
 
     

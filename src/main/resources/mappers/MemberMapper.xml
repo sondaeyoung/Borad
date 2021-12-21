@@ -41,9 +41,27 @@
         )            
     </insert>
     
-    <select id="login" parameterType="MemberDTO" resultType="MemberDTO">
+    <select id="login" parameterType="String" resultType="String">
         SELECT
-            user_ID,user_PW
+            user_PW
+        FROM
+            USER_TB
+        WHERE
+            user_ID = #{user_ID}
+    </select>
+    
+    <select id="authority" parameterType="String" resultType="int">
+        SELECT
+            user_Authority
+        FROM
+            USER_TB
+        WHERE
+            user_ID = #{user_ID}
+    </select>
+    
+    <select id="state" parameterType="String" resultType="int">
+        SELECT
+            user_State
         FROM
             USER_TB
         WHERE

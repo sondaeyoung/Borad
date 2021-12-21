@@ -7,9 +7,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-
+import com.board.domain.BoardDTO;
 import com.board.domain.MemberDTO;
 import com.board.service.MemberService;
 
@@ -19,7 +21,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
     
-    @GetMapping(value = "/board/join.do") //회원가입 버튼을 누르거나 주소를 적어서 이동하였을때
+    @GetMapping(value = "/board/join.do") //회원가입하기 버튼을 누르거나 주소를 적어서 이동하였을때
     public String openMemberJoin(Model model) {
         model.addAttribute("member", new MemberDTO());
         return "board/join";
@@ -51,17 +53,41 @@ public class MemberController {
     
     
 
-    @GetMapping(value = "/board/login.do") //회원가입 버튼을 누르거나 주소를 적어서 이동하였을때
+    @GetMapping(value = "/board/login.do") //로그인 주소로 이동할때
     public String openLogin(Model model) {
-        
+        model.addAttribute("member", new MemberDTO());
         return "board/login";
+    }
+    
+    @PostMapping(value = "/board/login.do") //로그인 정보 입력하고 로그인하기 눌렀을때
+    public String Login(MemberDTO member) {
+        try {
+            if(member.getUser_ID() == null || member.getUser_PW() == null) {
+                System.out.println("아이디 비밀번호가 안적힘");
+                return "redirect:/board/login.do";
+            }else {
+                String inputPW = member.getUser_PW();
+                MemberDTO result = memberService.loginMember(member.getUser_ID());
+                
+                if(inputPW == result.getUser_PW()) {
+                    System.out.println("같으면 로그인성공");
+                    return "redirect:/board/join.do";
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("뭔가ㅓ 오류뜸");
+            return "redirect:/board/login.do";
+            
+        }
+        return "redirect:/board/join.do";
     }
     
     @GetMapping(value = "/board/managerPage.do") //관리자가 유저 관리하는 페이지로 가는
     public String openUserList(Model model) {
         
-        List<MemberDTO> boardList = memberService.getMemberList();
-        model.addAttribute("boardList", boardList);
+        List<MemberDTO> memberList = memberService.getMemberList();
+        model.addAttribute("memberList", memberList);
         
         return "board/managerPage";
     }

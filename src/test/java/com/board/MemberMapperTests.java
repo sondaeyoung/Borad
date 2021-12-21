@@ -1,8 +1,13 @@
 package com.board;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.CollectionUtils;
+
 
 import com.board.domain.MemberDTO;
 import com.board.mapper.MemberMapper;
@@ -92,10 +97,25 @@ class MemberMapperTests {
     
     @Test
     public void tsetMemberTotalCount() {
-        MemberDTO member = new MemberDTO();
-        
-
-        int result = memberMapper.join(member);
+         
+        int result = memberMapper.selectMemberTotalCount();
         System.out.println("결과는 " + result + "입니다.");
+    }
+    
+    @Test //리스트 배열에 담은거 여러게 꺼내서 보여주기
+    public void testSelectList() {
+        int memberTotalCount = memberMapper.selectMemberTotalCount();
+        if (memberTotalCount > 0) {
+            List<MemberDTO> memberList = memberMapper.selectMemberList();
+            if (CollectionUtils.isEmpty(memberList) == false) {
+                for (MemberDTO member : memberList) {
+                    System.out.println("=========================");
+                    
+                    System.out.println(member.getUser_ID());
+                    
+                    System.out.println("=========================");
+                }
+            }
+        }
     }
 }

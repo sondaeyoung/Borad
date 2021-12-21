@@ -9,7 +9,7 @@ import com.board.domain.MemberDTO;
 
 @Mapper
 public interface MemberMapper {
-        public int login(MemberDTO member); //로그인
+        public MemberDTO login(String user_ID); //로그인
         
         public int join(MemberDTO member); // 회원가입
         

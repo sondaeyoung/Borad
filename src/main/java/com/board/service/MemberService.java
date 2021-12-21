@@ -15,4 +15,6 @@ public interface MemberService {
     public boolean deleteMember(String user_ID);
     
     public List<MemberDTO> getMemberList();
+    
+    public MemberDTO loginMember(String user_ID);
 }

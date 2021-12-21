@@ -43,7 +43,7 @@
     
     <select id="login" parameterType="MemberDTO" resultType="MemberDTO">
         SELECT
-            user_PW
+            user_ID,user_PW
         FROM
             USER_TB
         WHERE
@@ -85,7 +85,6 @@
             <include refid="memberColumns" />
         FROM
             USER_TB
-        
         ORDER BY
             user_Number DESC,
             user_JoinDate DESC
@@ -93,7 +92,7 @@
     
     <select id="selectMemberTotalCount" parameterType="MemberDTO" resultType="int">
         SELECT
-            COUNT(*)
+            COUNT(user_Number)
         FROM
             USER_TB
         

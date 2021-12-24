@@ -21,4 +21,10 @@ public interface MemberService {
     public int memberAuthority(String user_ID);
     
     public int memberState(String user_ID);
+
+    public int idCheck(String user_ID);
+
+    public int nickNameCheck(String user_NickName);
+
+    public int emailCheck(String user_Email);
 }

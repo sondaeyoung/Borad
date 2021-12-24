@@ -26,4 +26,10 @@ public interface MemberMapper {
         public int authority(String user_ID); //권한 확인
         
         public int state(String user_ID); //유저 상태 확인
+
+        public int idCheck(String user_ID); //아이디 중복체크펑션
+
+        public int nickNameCheck(String user_NickName); //닉네임 중복체크
+
+        public int emailCheck(String user_Email); //이메일 중복체크
 }

@@ -1,6 +1,7 @@
 package com.board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.board.constant.Method;
 import com.board.domain.BoardDTO;
@@ -63,8 +65,7 @@ public class MemberController extends UiUtils {
             session.setAttribute("sessionAuthority", null);
             model.addAttribute("member", new MemberDTO());
             return "board/login";
-       
-        
+     
         
     }
     
@@ -117,4 +118,60 @@ public class MemberController extends UiUtils {
         
         return "board/managerPage";
     }
+    
+//    html 스크립트 맵퍼관련
+    @PostMapping(value = "/board/idCheck") //동적으로 아래서 알려주려고 
+    @ResponseBody //@ResponseBody를 해줘야 데이터값을 html로 보내줌
+    public int idCheck(@RequestParam("user_ID") String user_ID) {
+        try {
+        int db = memberService.idCheck(user_ID);
+        System.out.println(db);
+        if(db>0) {
+            return db;
+        }else {
+            return db;
+        }
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("오류뜸");
+            return 0;
+        }
+    }
+    
+    @PostMapping(value = "/board/nickNameCheck") //동적으로 아래서 알려주려고 
+    @ResponseBody //@ResponseBody를 해줘야 데이터값을 html로 보내줌
+    public int nickNameCheck(@RequestParam("user_NickName") String user_NickName) {
+        try {
+        int db = memberService.nickNameCheck(user_NickName);
+        System.out.println(db);
+        if(db > 0) {
+            return db;
+        }else {
+            return db;
+        }
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("오류뜸");
+            return 0;
+        }
+    }
+    
+    @PostMapping(value = "/board/emailCheck") //동적으로 아래서 알려주려고 
+    @ResponseBody //@ResponseBody를 해줘야 데이터값을 html로 보내줌
+    public int emailCheck(@RequestParam("user_Email") String user_Email) {
+        try {
+        int db = memberService.emailCheck(user_Email);
+        System.out.println(db);
+        if(db>0) {
+            return db;
+        }else {
+            return db;
+        }
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("오류뜸");
+            return 0;
+        }
+    }
+    
 }

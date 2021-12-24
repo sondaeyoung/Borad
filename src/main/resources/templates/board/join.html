@@ -7,7 +7,7 @@
     
 		<th:block layout:fragment="content">
 		   <div class="card-content">
-            <form class="form-horizontal" th:action="@{/board/join.do}" th:object="${member}" method="post" >
+            <form class="form-horizontal" th:action="@{/board/join.do}" th:object="${member}" method="post"   >
 	            <h3 style="text-align: center;">회원가입 화면</h3>
 	            
 	           <input type="hidden" th:if="*{user_Number != null and user_Number > 0}" th:field="*{user_Number}" />
@@ -15,14 +15,15 @@
 	            <div class="form-group">
                     <label for="user_ID" class="col-sm-2 control-label">아이디</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="10" th:field="*{user_ID}" class="form-control" placeholder="10자 이내로 입력해주세요." >
+                        <input type="text" maxlength="10" th:field="*{user_ID}" id="user_ID" class="form-control" placeholder="10자 이내로 입력해주세요." onkeyup="idCheckFunction();">
+                        <h5 style="color: red;" id="idCheckMessage"></h5>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_PW" class="col-sm-2 control-label">비밀번호</label>
                     <div class="col-sm-10">
-                        <input type="password"  maxlength="16" th:field="*{user_PW}" class="form-control" placeholder="영문,숫자 포함 8자 이상 16자 이내" >
+                        <input type="password"  maxlength="16" th:field="*{user_PW}" id="user_PW" class="form-control" placeholder="영문,숫자 포함 8자 이상 16자 이내" >
                     </div>
                 </div>
                 
@@ -36,49 +37,51 @@
                 <div class="form-group">
                     <label for="user_Name" class="col-sm-2 control-label">이름</label>
                     <div class="col-sm-10">
-                        <input type="text"  maxlength="10" th:field="*{user_Name}" class="form-control" placeholder="이름을 10자 이내로 입력해주세요." >
+                        <input type="text"  maxlength="10" th:field="*{user_Name}" id="user_Name"  class="form-control" placeholder="이름을 10자 이내로 입력해주세요." >
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_NickName" class="col-sm-2 control-label">닉네임</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="10" th:field="*{user_NickName}" class="form-control" placeholder="닉네임 10자 이내로 입력해주세요." >
+                        <input type="text" maxlength="10" th:field="*{user_NickName}" id="user_NickName" class="form-control" placeholder="닉네임 10자 이내로 입력해주세요." onkeyup="nickNameCheckFunction();" >
+                        <h5 style="color: red;" id="nickNameCheckMessage"></h5>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_Gender" class="col-sm-2 control-label">성별</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="4" th:field="*{user_Gender}" class="form-control" placeholder="남자/여자" >
+                        <input type="text" maxlength="4" th:field="*{user_Gender}" id="user_Gender" class="form-control" placeholder="남자/여자" >
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_DOB" class="col-sm-2 control-label">생년월일</label>
                     <div class="col-sm-10">
-                        <input type="text" th:field="*{user_DOB}" class="form-control" placeholder="생년월일 ex) 1990-12-30" >
+                        <input type="text" th:field="*{user_DOB}" id="user_DOB" class="form-control" placeholder="생년월일 ex) 1990-12-30" >
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_Email" class="col-sm-2 control-label">이메일</label>
                     <div class="col-sm-10">
-                        <input type="email" th:field="*{user_Email}" class="form-control" placeholder="기본 도메인 규격에 맞게 입력해주세요" >
+                        <input type="email" th:field="*{user_Email}" id="user_Email" class="form-control" placeholder="기본 도메인 규격에 맞게 입력해주세요" onkeyup="emailCheckFunction();" >
+                        <h5 style="color: red;" id="emailCheckMessage"></h5>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_PhoneNumber" class="col-sm-2 control-label">휴대전화</label>
                     <div class="col-sm-10">
-                        <input type="text" th:field="*{user_PhoneNumber}" class="form-control" placeholder="-를빼고 입력해주세요 ex)01044449765." >
+                        <input type="text" th:field="*{user_PhoneNumber}" id="user_PhoneNumber" class="form-control" placeholder="-를빼고 입력해주세요 ex)01044449765." >
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="user_Address" class="col-sm-2 control-label">주소</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="50" th:field="*{user_Address}" class="form-control" placeholder="기본 배송지로 지정될 주소를 입력해주세요" >
+                        <input type="text" maxlength="50" th:field="*{user_Address}" id="user_Address" class="form-control" placeholder="기본 배송지로 지정될 주소를 입력해주세요" >
                     </div>
                 </div>
                 
@@ -95,4 +98,107 @@
         </div>
         <!-- /.card-content -->
 		</th:block>
+		
+		
+		<th:block layout:fragment="script">
+        <script th:inline="javascript">
+        var user_ID = $('#user_ID').val();
+        var user_PW = $('#user_PW').val();
+        var user_Name = $('#user_Name').val();
+        var user_NickName = $('#user_NickName').val();
+        var user_Gender = $('#user_Gender').val();
+        var user_DOB = $('#user_DOB').val();
+        var user_Email = $('#user_Email').val();
+        var user_PhoneNumber = $('#user_PhoneNumber').val();
+        var user_Address = $('#user_Address').val();
+       
+        
+        var idCheckPass = false;        //아이디중복 체크 확인변수
+        var nickNameCheckPass = false;
+        var emailCheckPass = false;
+        var allCheckPass = false;
+        
+        /* 아이디 중복 체크 펑션 */
+        function idCheckFunction(){
+            user_ID = $('#user_ID').val();
+            if(user_ID == null || user_ID == ""){
+            	$('#idCheckMessage').css("color","red");
+            	$('#idCheckMessage').html('아이디를 입력해주세용');
+             }else{
+                 $.ajax({
+                     type: 'post', url: '/board/idCheck', data:{user_ID: user_ID},
+                  success: function(db){
+                      if(db > 0){
+                    	  $('#idCheckMessage').css("color","red");
+                    	  $('#idCheckMessage').html('아이디가 중복되서 사용할수없습니다');
+                    	  idCheckpass = false;
+                      }else{
+                    	  $('#idCheckMessage').css("color","green");
+                    	  $('#idCheckMessage').html('아이디 사용 가능합니다');
+                          idCheckPass = true;
+                      }
+                  },
+                  error:function(){
+                      console.log("에러입니다");
+                  }
+                });
+             }
+        }
+         
+        /* 닉네임 중복 체크 펑션 */
+        function nickNameCheckFunction(){
+            user_NickName = $('#user_NickName').val();
+            if(user_NickName == null || user_NickName == ""){
+                $('#nickNameCheckMessage').css("color","red");
+                $('#nickNameCheckMessage').html('닉네임을 입력해주세용');
+             }else{
+                 $.ajax({
+                     type: 'post', url: '/board/nickNameCheck', data:{user_NickName: user_NickName},
+                  success: function(db){
+                      if(db > 0){
+                          $('#nickNameCheckMessage').css("color","red");
+                          $('#nickNameCheckMessage').html('이 닉네임은 중복되서 사용할수없습니다');
+                          nickNameCheckPass = false;
+                      }else{
+                          $('#nickNameCheckMessage').css("color","green");
+                          $('#nickNameCheckMessage').html('이 닉네임 사용 가능합니다');
+                          nickNameCheckPass = true;
+                      }
+                  },
+                  error:function(){
+                      console.log("에러입니다");
+                  }
+                });
+             }
+        }
+        
+        /* 이메일 중복 체크 펑션 */
+        function emailCheckFunction(){
+            user_Email = $('#user_Email').val();
+            if(user_Email == null || user_Email == ""){
+                $('#emailCheckMessage').css("color","red");
+                $('#emailCheckMessage').html('이메일을 입력해주세용');
+             }else{
+                 $.ajax({
+                     type: 'post', url: '/board/emailCheck', data:{user_Email: user_Email},
+                  success: function(db){
+                      if(db > 0){
+                          $('#emailCheckMessage').css("color","red");
+                          $('#emailCheckMessage').html('이 이메일은 중복되서 사용할수없습니다');
+                          emailCheckPass = false;
+                      }else{
+                          $('#emailCheckMessage').css("color","green");
+                          $('#emailCheckMessage').html('이 이메일 사용 가능합니다');
+                          emailCheckPass = true;
+                      }
+                  },
+                  error:function(){
+                      console.log("에러입니다");
+                  }
+                });
+             }
+        }
+        
+        
+        </script>
 </html>

@@ -50,6 +50,33 @@
             user_ID = #{user_ID}
     </select>
     
+    <select id="idCheck" parameterType="String" resultType="int">
+        SELECT
+            COUNT(user_ID)
+        FROM
+            USER_TB
+        WHERE
+            user_ID = #{user_ID}
+    </select>
+    
+    <select id="nickNameCheck" parameterType="String" resultType="int">
+        SELECT
+            COUNT(user_NickName)
+        FROM
+            USER_TB
+        WHERE
+            user_NickName = #{user_NickName}
+    </select>
+    
+    <select id="emailCheck" parameterType="String" resultType="int">
+        SELECT
+            COUNT(user_Email)
+        FROM
+            USER_TB
+        WHERE
+            user_Email = #{user_Email}
+    </select>
+    
     <select id="authority" parameterType="String" resultType="int">
         SELECT
             user_Authority

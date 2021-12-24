@@ -4,9 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -83,6 +80,24 @@ public class MemberServiceImpl implements MemberService {
         
         int result = memberMapper.state(user_ID);
         
+        return result;
+    }
+    
+    @Override
+    public int idCheck(String user_ID) { //아이디 중복체크
+        int result = memberMapper.idCheck(user_ID);
+        return result;
+    }
+    
+    @Override
+    public int nickNameCheck(String user_NickName) { //아이디 중복체크
+        int result = memberMapper.nickNameCheck(user_NickName);
+        return result;
+    }
+    
+    @Override
+    public int emailCheck(String user_Email) { //아이디 중복체크
+        int result = memberMapper.emailCheck(user_Email);
         return result;
     }
 

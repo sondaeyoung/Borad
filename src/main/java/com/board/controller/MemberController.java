@@ -61,10 +61,19 @@ public class MemberController extends UiUtils {
 
     @GetMapping(value = "/board/login.do") //로그인 주소로 이동할때
     public String openLogin(Model model,HttpSession session) {
-            session.setAttribute("sessionID", null); //세션 초기화
-            session.setAttribute("sessionAuthority", null);
-            model.addAttribute("member", new MemberDTO());
+        try {
+            if(session.getAttribute("sessionID") != null) {
+                session.setAttribute("sessionID", null); //세션 초기화
+                session.setAttribute("sessionAuthority", null);
+            }
+                model.addAttribute("member", new MemberDTO());
+                return "board/login";
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("오류뜸");
             return "board/login";
+        }
+        
      
         
     }

@@ -7,7 +7,7 @@
     
 		<th:block layout:fragment="content">
 		   <div class="card-content">
-            <form class="form-horizontal" th:action="@{/board/join.do}" th:object="${member}" method="post"   >
+            <form class="form-horizontal" th:action="@{/board/join.do}" th:object="${member}" method="post" onsubmit="return checkPassFunction(this);" >
 	            <h3 style="text-align: center;">회원가입 화면</h3>
 	            
 	           <input type="hidden" th:if="*{user_Number != null and user_Number > 0}" th:field="*{user_Number}" />
@@ -197,6 +197,30 @@
                   }
                 });
              }
+        }
+        
+        /* 중복체크 눌러서 확인 받았는지 체크하는 펑션 */
+        
+        function checkPassFunction(form){
+            if(idCheckPass == true && nickCheckPass == true && emailCheckPass == true){
+                return true;
+            }else if(idCheckPass == false){
+                alert("아이디 중복 확인해야합니다.");
+                return false;
+            }else if(nickCheckPass == false){
+                alert("닉네임 중복 확인해야합니다.");
+                return false;
+            }else if(emailCheckPass == false){
+                alert("이메일 중복 확인해야합니다.");
+                return false;
+            }else if(user_ID == null || user_ID == "" || user_PW == null || user_PW == "" || user_Name == null || user_Name == "" || user_NickName == null || user_NickName == "" ||
+            		user_Gender == null || user_Gender == "" || user_DOB == null || user_DOB == "" || useuser_Emailr_ID == null || user_Email == "" || user_PhoneNumber == null || user_PhoneNumber == "" ||
+            		user_Address == null || user_Address == "" ){
+            	alert("모든 정보를 입력해 주셔야합니다.")
+            	var user_ID = $('#user_ID').val();
+                return false;
+            }
+            
         }
         
         

@@ -34,7 +34,7 @@ public class MemberController extends UiUtils {
     }
     
     @PostMapping(value = "/board/join.do") //회원가입 버튼을 누르고 로그인페이지로 이동하게
-    public String registerMember(MemberDTO member) {
+    public String registerMember(MemberDTO member, Model model) {
         try {
             boolean isRegistered = memberService.registerMember(member);
             if (isRegistered == false) {
@@ -43,7 +43,7 @@ public class MemberController extends UiUtils {
                 return "redirect:/board/join.do";
             }else {
                 System.out.println("유저 등록에 성공");
-                return "redirect:/board/login.do";
+                return showMessageWithRedirect("회원가입 성공", "/board/login.do", Method.GET, null, model);
             }
         } catch (DataAccessException e) {
             // TODO => 데이터베이스 처리 과정에 문제가 발생하였다는 메시지를 전달

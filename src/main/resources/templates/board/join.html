@@ -7,7 +7,7 @@
     
 		<th:block layout:fragment="content">
 		   <div class="card-content">
-            <form class="form-horizontal" th:action="@{/board/join.do}" th:object="${member}" method="post" onsubmit="return checkPassFunction(this);" >
+            <form class="form-horizontal" name="joinForm" th:action="@{/board/join.do}" th:object="${member}" method="post" onsubmit = "return joinformCheck();" >
 	            <h3 style="text-align: center;">회원가입 화면</h3>
 	            
 	           <input type="hidden" th:if="*{user_Number != null and user_Number > 0}" th:field="*{user_Number}" />
@@ -15,7 +15,7 @@
 	            <div class="form-group">
                     <label for="user_ID" class="col-sm-2 control-label">아이디</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="10" th:field="*{user_ID}" id="user_ID" class="form-control" placeholder="10자 이내로 입력해주세요." onkeyup="idCheckFunction();">
+                        <input type="text" maxlength="10" th:field="*{user_ID}" id="user_ID" class="form-control" placeholder="10자 이내로 입력해주세요." onkeyup ="idCheckFunction();">
                         <h5 style="color: red;" id="idCheckMessage"></h5>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="user_NickName" class="col-sm-2 control-label">닉네임</label>
                     <div class="col-sm-10">
-                        <input type="text" maxlength="10" th:field="*{user_NickName}" id="user_NickName" class="form-control" placeholder="닉네임 10자 이내로 입력해주세요." onkeyup="nickNameCheckFunction();" >
+                        <input type="text" maxlength="10" th:field="*{user_NickName}" id="user_NickName" class="form-control" placeholder="닉네임 10자 이내로 입력해주세요." onkeyup ="nickNameCheckFunction();" >
                         <h5 style="color: red;" id="nickNameCheckMessage"></h5>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="form-group">
                     <label for="user_Email" class="col-sm-2 control-label">이메일</label>
                     <div class="col-sm-10">
-                        <input type="email" th:field="*{user_Email}" id="user_Email" class="form-control" placeholder="기본 도메인 규격에 맞게 입력해주세요" onkeyup="emailCheckFunction();" >
+                        <input type="email" th:field="*{user_Email}" id="user_Email" class="form-control" placeholder="기본 도메인 규격에 맞게 입력해주세요" onkeyup ="emailCheckFunction();" >
                         <h5 style="color: red;" id="emailCheckMessage"></h5>
                     </div>
                 </div>
@@ -86,14 +86,13 @@
                 </div>
                 
                 <div class="btn_wrap text-center">
-                    
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">회원가입</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light" >회원가입</button>
+                    <a th:href="@{/board/login.do}" class="btn btn-primary waves-effect waves-light">뒤로가기</a>
                 </div>
                 
 	            
             </form>
-                <div><span th:text="${lll}">여기는 테스트 해보는겁니다</span></div>
-                <div><span>여기는 테스트 해보는겁니다</span></div>  
+                
             
         </div>
         <!-- /.card-content -->
@@ -102,15 +101,7 @@
 		
 		<th:block layout:fragment="script">
         <script th:inline="javascript">
-        var user_ID = $('#user_ID').val();
-        var user_PW = $('#user_PW').val();
-        var user_Name = $('#user_Name').val();
-        var user_NickName = $('#user_NickName').val();
-        var user_Gender = $('#user_Gender').val();
-        var user_DOB = $('#user_DOB').val();
-        var user_Email = $('#user_Email').val();
-        var user_PhoneNumber = $('#user_PhoneNumber').val();
-        var user_Address = $('#user_Address').val();
+        
        
         
         var idCheckPass = false;        //아이디중복 체크 확인변수
@@ -120,7 +111,8 @@
         
         /* 아이디 중복 체크 펑션 */
         function idCheckFunction(){
-            user_ID = $('#user_ID').val();
+        	idCheckPass = false;
+            var user_ID = $('#user_ID').val();
             if(user_ID == null || user_ID == ""){
             	$('#idCheckMessage').css("color","red");
             	$('#idCheckMessage').html('아이디를 입력해주세용');
@@ -147,7 +139,8 @@
          
         /* 닉네임 중복 체크 펑션 */
         function nickNameCheckFunction(){
-            user_NickName = $('#user_NickName').val();
+        	nickNameCheckPass = false;
+        	var user_NickName = $('#user_NickName').val();
             if(user_NickName == null || user_NickName == ""){
                 $('#nickNameCheckMessage').css("color","red");
                 $('#nickNameCheckMessage').html('닉네임을 입력해주세용');
@@ -174,7 +167,8 @@
         
         /* 이메일 중복 체크 펑션 */
         function emailCheckFunction(){
-            user_Email = $('#user_Email').val();
+        	emailCheckPass = false;
+        	var user_Email = $('#user_Email').val();
             if(user_Email == null || user_Email == ""){
                 $('#emailCheckMessage').css("color","red");
                 $('#emailCheckMessage').html('이메일을 입력해주세용');
@@ -199,27 +193,80 @@
              }
         }
         
-        /* 중복체크 눌러서 확인 받았는지 체크하는 펑션 */
+        /* 회원가입 유효성,중복체크 검사하는 펑션 */
         
-        function checkPassFunction(form){
-            if(idCheckPass == true && nickCheckPass == true && emailCheckPass == true){
-                return true;
-            }else if(idCheckPass == false){
-                alert("아이디 중복 확인해야합니다.");
-                return false;
-            }else if(nickCheckPass == false){
-                alert("닉네임 중복 확인해야합니다.");
-                return false;
-            }else if(emailCheckPass == false){
-                alert("이메일 중복 확인해야합니다.");
-                return false;
-            }else if(user_ID == null || user_ID == "" || user_PW == null || user_PW == "" || user_Name == null || user_Name == "" || user_NickName == null || user_NickName == "" ||
-            		user_Gender == null || user_Gender == "" || user_DOB == null || user_DOB == "" || useuser_Emailr_ID == null || user_Email == "" || user_PhoneNumber == null || user_PhoneNumber == "" ||
-            		user_Address == null || user_Address == "" ){
-            	alert("모든 정보를 입력해 주셔야합니다.")
-            	var user_ID = $('#user_ID').val();
+        
+        
+        function joinformCheck(){ //유효성검사
+        	var user_ID = $('#user_ID').val();
+            var user_PW = $('#user_PW').val();
+            var user_Name = $('#user_Name').val();
+            var user_NickName = $('#user_NickName').val();
+            var user_Gender = $('#user_Gender').val();
+            var user_DOB = $('#user_DOB').val();
+            var user_Email = $('#user_Email').val();
+            var user_PhoneNumber = $('#user_PhoneNumber').val();
+            var user_Address = $('#user_Address').val();
+            
+            if(idCheckPass == false){
+                alert("사용할수 없는 아이디입니다.");
                 return false;
             }
+            if(nickNameCheckPass == false){
+                alert("사용할수 없는 닉네임입니다");
+                return false;
+            }
+            if(emailCheckPass == false){
+                alert("사용할수 없는 이메일입니다.");
+                return false;
+            }
+            
+            if(user_ID == null || user_ID == ""){
+            	alert("아이디를 입력해주세요.")
+            	return false;
+            }
+            
+            if(user_PW == null || user_PW == ""){
+                alert("비밀번호를 입력해주세요.")
+                return false;
+            }
+            
+            if(user_Name == null || user_Name == ""){
+                alert("이름을 입력해주세요.")
+                return false;
+            }
+            
+            if(user_NickName == null || user_NickName == ""){
+                alert("닉네임을 입력해주세요.")
+                return false;
+            }
+            
+            if(user_Gender == null || user_Gender == ""){
+                alert("성별을 입력해주세요.")
+                return false;
+            }
+            
+            if(user_DOB == null || user_DOB == ""){
+                alert("생년월일을 입력해주세요.")
+                return false;
+            }
+            
+            if(user_Email == null || user_Email == ""){
+                alert("이메일을 입력해주세요.")
+                return false;
+            }
+            
+            if(user_PhoneNumber == null || user_PhoneNumber == ""){
+                alert("핸드폰을 입력해주세요.")
+                return false;
+            }
+           
+            if(user_Address == null || user_Address == ""){
+                alert("주소를 입력해주세요.")
+                return false;
+            }
+            
+           
             
         }
         
